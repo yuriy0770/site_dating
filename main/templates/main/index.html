@@ -1,0 +1,743 @@
+{% extends 'main/base.html' %}
+{% load static %}
+
+{% block title %}Знакомства и общение — LoveConnect{% endblock %}
+
+{% block content %}
+
+<!-- ============================================ -->
+<!-- 1. ГЕРОЙ-БЛОК — тёплый тёмный фон + анимация -->
+<!-- ============================================ -->
+<section class="hero-section">
+    <!-- Фоновые анимированные пятна -->
+    <div class="hero-glow-1"></div>
+    <div class="hero-glow-2"></div>
+
+    <div class="container position-relative">
+        <div class="row align-items-center g-5">
+            <!-- Текстовая часть -->
+            <div class="col-lg-6 text-center text-lg-start hero-text">
+                <span class="hero-badge">
+                    🤝 Живое общение
+                </span>
+                <h1 class="display-2 fw-bold hero-title">
+                    Знакомства <br>
+                    <span class="hero-gradient-text">
+                        без стеснения
+                    </span>
+                </h1>
+                <p class="lead fs-4 mt-4 hero-subtitle">
+                    Тысячи людей уже нашли друзей и партнёров. Присоединяйся к сообществу.
+                </p>
+                <div class="mt-4">
+                    {% if user.is_authenticated %}
+                        <a href="#" class="btn btn-lg px-5 py-3 hero-btn">
+                            <i class="bi bi-people"></i> Смотреть анкеты
+                        </a>
+                    {% else %}
+                        <a href="{% url 'users:register' %}" class="btn btn-lg px-5 py-3 hero-btn">
+                            <i class="bi bi-person-plus"></i> Создать анкету
+                        </a>
+                        <p class="mt-3 hero-login-link">
+                            Уже есть аккаунт?
+                            <a href="{% url 'users:login' %}" class="text-decoration-none fw-bold">Войти</a>
+                        </p>
+                    {% endif %}
+                </div>
+                <!-- Статистика -->
+                <div class="mt-5 d-flex gap-5 justify-content-center justify-content-lg-start hero-stats">
+                    <div>
+                        <span class="display-6 fw-bold">12 847</span>
+                        <p class="small">активных пользователей</p>
+                    </div>
+                    <div>
+                        <span class="display-6 fw-bold">1 203</span>
+                        <p class="small">пар создано</p>
+                    </div>
+                    <div>
+                        <span class="display-6 fw-bold">4.8</span>
+                        <p class="small">рейтинг</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Правая часть — картинка -->
+            <div class="col-lg-6 text-center hero-image">
+                <div class="hero-image-wrapper">
+                    <img src="{% static 'images/hero-people.jpg' %}"
+                         alt="Люди общаются"
+                         class="hero-image-img"
+                         onerror="this.src='data:image/svg+xml,%3Csvg xmlns=\'http://www.w3.org/2000/svg\' width=\'500\' height=\'400\'%3E%3Crect fill=\'%232a1f18\' width=\'500\' height=\'400\'/%3E%3Ctext x=\'60\' y=\'200\' font-size=\'28\' font-family=\'sans-serif\' fill=\'%23d4a373\'%3E👥 Люди общаются%3C/text%3E%3C/svg%3E'">
+                    <!-- Плавающий блок -->
+                    <div class="hero-float-badge">
+                        <span class="hero-float-icon">💬</span>
+                        <div>
+                            <div class="hero-float-title">онлайн сейчас</div>
+                            <div class="hero-float-sub">328 человек</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- ============================================ -->
+<!-- 2. БЛОК ПРЕИМУЩЕСТВ -->
+<!-- ============================================ -->
+<section class="features-section">
+    <div class="container">
+        <div class="row text-center g-4">
+            <div class="col-md-3">
+                <div class="feature-item">
+                    <div class="feature-icon">
+                        <i class="bi bi-people fs-2"></i>
+                    </div>
+                    <h6 class="feature-title">Реальные люди</h6>
+                    <p class="feature-desc">Только живые анкеты, без ботов</p>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="feature-item">
+                    <div class="feature-icon">
+                        <i class="bi bi-shield fs-2"></i>
+                    </div>
+                    <h6 class="feature-title">Безопасно</h6>
+                    <p class="feature-desc">Модерация и верификация</p>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="feature-item">
+                    <div class="feature-icon">
+                        <i class="bi bi-chat-dots fs-2"></i>
+                    </div>
+                    <h6 class="feature-title">Удобный чат</h6>
+                    <p class="feature-desc">Общайся в реальном времени</p>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="feature-item">
+                    <div class="feature-icon">
+                        <i class="bi bi-graph-up fs-2"></i>
+                    </div>
+                    <h6 class="feature-title">Умный подбор</h6>
+                    <p class="feature-desc">Алгоритм подбирает по интересам</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- ============================================ -->
+<!-- 3. ПОПУЛЯРНЫЕ АНКЕТЫ -->
+<!-- ============================================ -->
+<section class="profiles-section">
+    <div class="container">
+        <div class="section-header">
+            <h3 class="section-title">Популярные анкеты</h3>
+            <a href="#" class="section-link">Все →</a>
+        </div>
+        <div class="row row-cols-1 row-cols-sm-2 row-cols-md-4 g-4">
+            {% for profile in profiles %}
+            <div class="col">
+                <div class="profile-card">
+                    <div class="profile-image-wrapper">
+                        {% if profile.user.avatar %}
+                            <img src="{{ profile.user.avatar.url }}" class="profile-image" alt="{{ profile.user.username }}">
+                        {% else %}
+                            <div class="profile-image-placeholder">
+                                <i class="bi bi-person fs-1"></i>
+                            </div>
+                        {% endif %}
+                        <div class="profile-views">
+                            <i class="bi bi-eye"></i> {{ profile.views_count }}
+                        </div>
+                    </div>
+                    <div class="profile-body">
+                        <div class="profile-info">
+                            <div>
+                                <div class="profile-name">{{ profile.user.username }}</div>
+                                <div class="profile-meta">
+                                    <i class="bi bi-geo-alt"></i> {{ profile.user.city|default:"Не указан" }}
+                                    {% if profile.user.age %} • {{ profile.user.age }} лет{% endif %}
+                                </div>
+                            </div>
+                            <div class="profile-actions">
+                                <button class="profile-like-btn">
+                                    <i class="bi bi-heart"></i> <span class="like-count">{{ profile.likes.count }}</span>
+                                </button>
+                                <a href="#" class="profile-chat-btn">
+                                    <i class="bi bi-chat"></i>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            {% empty %}
+            <div class="col-12 text-center py-5 empty-state">
+                <i class="bi bi-emoji-smile fs-1 d-block"></i>
+                <p class="mt-3">Пока нет анкет. Будь первым!</p>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+</section>
+
+<!-- ============================================ -->
+<!-- 4. СВЕЖИЕ ПОСТЫ -->
+<!-- ============================================ -->
+<section class="posts-section">
+    <div class="container">
+        <div class="section-header">
+            <h3 class="section-title">Новости и события</h3>
+            <a href="#" class="section-link">Все →</a>
+        </div>
+        <div class="row g-4">
+            {% for post in posts %}
+            <div class="col-md-6 col-lg-4">
+                <div class="post-card">
+                    {% if post.image %}
+                        <img src="{{ post.image.url }}" class="post-image" alt="Пост">
+                    {% endif %}
+                    <div class="post-body">
+                        <div class="post-author">
+                            <div class="post-avatar">
+                                {% if post.author.profile.user.avatar %}
+                                    <img src="{{ post.author.profile.user.avatar.url }}" class="post-avatar-img">
+                                {% else %}
+                                    <i class="bi bi-person"></i>
+                                {% endif %}
+                            </div>
+                            <span class="post-author-name">{{ post.author.username }}</span>
+                            <span class="post-date">{{ post.created_at|date:"d M" }}</span>
+                        </div>
+                        <p class="post-content">{{ post.content|truncatechars:100 }}</p>
+                        <div class="post-stats">
+                            <span><i class="bi bi-heart"></i> {{ post.likes.count }}</span>
+                            <span><i class="bi bi-chat"></i> {{ post.comments.count }}</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            {% empty %}
+            <div class="col-12 text-center py-5 empty-state">
+                <i class="bi bi-journal fs-1 d-block"></i>
+                <p class="mt-3">Пока нет постов. Будь первым!</p>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+</section>
+
+<!-- ============================================ -->
+<!-- 5. ПРИЗЫВ К ДЕЙСТВИЮ (CTA) -->
+<!-- ============================================ -->
+<section class="cta-section">
+    <div class="container text-center">
+        <div class="cta-wrapper">
+            <h2 class="cta-title">Готов начать знакомиться?</h2>
+            <p class="cta-desc">Присоединяйся к сообществу — это бесплатно</p>
+            <a href="{% url 'users:register' %}" class="btn btn-lg cta-btn">
+                <i class="bi bi-person-plus"></i> Создать анкету
+            </a>
+        </div>
+    </div>
+</section>
+
+<!-- ============================================ -->
+<!-- СТИЛИ -->
+<!-- ============================================ -->
+<style>
+/* ===== ОБЩИЙ ФОН ===== */
+body {
+    background: #120e0b;
+}
+
+/* ===== ГЕРОЙ-БЛОК ===== */
+.hero-section {
+    background: linear-gradient(145deg, #1a1410 0%, #2a1f18 40%, #1e1612 100%);
+    min-height: 90vh;
+    display: flex;
+    align-items: center;
+    position: relative;
+    overflow: hidden;
+    padding: 80px 0;
+}
+
+/* Анимированные тёплые круги */
+.hero-section::before,
+.hero-section::after {
+    content: '';
+    position: absolute;
+    border-radius: 50%;
+    filter: blur(80px);
+    opacity: 0.4;
+    animation: floatBubble 12s infinite alternate ease-in-out;
+    pointer-events: none;
+}
+.hero-section::before {
+    width: 400px;
+    height: 400px;
+    background: radial-gradient(circle, #b87333, transparent 70%);
+    top: 10%;
+    left: -5%;
+    animation-delay: 0s;
+}
+.hero-section::after {
+    width: 500px;
+    height: 500px;
+    background: radial-gradient(circle, #8b5a2b, transparent 70%);
+    bottom: 10%;
+    right: -5%;
+    animation-delay: 3s;
+}
+
+.hero-glow-1,
+.hero-glow-2 {
+    position: absolute;
+    border-radius: 50%;
+    filter: blur(100px);
+    opacity: 0.25;
+    pointer-events: none;
+    animation: floatBubble 15s infinite alternate ease-in-out;
+}
+.hero-glow-1 {
+    width: 300px;
+    height: 300px;
+    background: radial-gradient(circle, #a0522d, transparent 70%);
+    top: 40%;
+    left: 30%;
+    animation-delay: 1s;
+}
+.hero-glow-2 {
+    width: 350px;
+    height: 350px;
+    background: radial-gradient(circle, #d2691e, transparent 70%);
+    bottom: 20%;
+    right: 20%;
+    animation-delay: 5s;
+}
+
+@keyframes floatBubble {
+    0% { transform: translate(0, 0) scale(1); }
+    33% { transform: translate(30px, -40px) scale(1.1); }
+    66% { transform: translate(-20px, 20px) scale(0.9); }
+    100% { transform: translate(15px, -15px) scale(1.05); }
+}
+
+/* Анимация текста */
+@keyframes fadeSlideUp {
+    from { opacity: 0; transform: translateY(40px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+.hero-text {
+    animation: fadeSlideUp 1s ease-out forwards;
+}
+.hero-image {
+    animation: fadeSlideUp 1.2s ease-out forwards;
+    animation-delay: 0.2s;
+    opacity: 0;
+}
+
+/* Текст */
+.hero-badge {
+    background: rgba(255,255,255,0.06);
+    backdrop-filter: blur(10px);
+    color: #d4c5b5;
+    padding: 4px 16px;
+    border-radius: 30px;
+    font-size: 14px;
+    font-weight: 500;
+    display: inline-block;
+    margin-bottom: 20px;
+    border: 1px solid rgba(255,255,255,0.06);
+}
+.hero-title {
+    color: #f5ede6;
+    line-height: 1.1;
+}
+.hero-gradient-text {
+    background: linear-gradient(45deg, #e8c9a0, #d4a373);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+.hero-subtitle {
+    color: #c4b5a5 !important;
+}
+.hero-btn {
+    background: linear-gradient(45deg, #d4a373, #b8834a);
+    border: none;
+    border-radius: 50px;
+    font-weight: 600;
+    color: #1a1410;
+    box-shadow: 0 10px 30px rgba(184, 131, 74, 0.3);
+}
+.hero-btn:hover {
+    background: linear-gradient(45deg, #c4956a, #a87545);
+    color: #1a1410;
+    transform: scale(1.02);
+    box-shadow: 0 15px 40px rgba(184, 131, 74, 0.4);
+}
+.hero-login-link {
+    color: #b5a598 !important;
+}
+.hero-login-link a {
+    color: #d4a373;
+}
+.hero-stats .display-6 {
+    color: #e8d5c0 !important;
+}
+.hero-stats .small {
+    color: #b5a598 !important;
+}
+
+/* Картинка */
+.hero-image-wrapper {
+    position: relative;
+}
+.hero-image-img {
+    width: 100%;
+    max-width: 520px;
+    border-radius: 24px;
+    box-shadow: 0 30px 60px rgba(0,0,0,0.6);
+    border: 1px solid rgba(255,255,255,0.05);
+}
+.hero-float-badge {
+    position: absolute;
+    bottom: -10px;
+    right: -10px;
+    background: rgba(30,22,18,0.85);
+    backdrop-filter: blur(12px);
+    border-radius: 16px;
+    padding: 12px 20px;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.4);
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    border: 1px solid rgba(255,255,255,0.06);
+}
+.hero-float-icon {
+    background: linear-gradient(45deg, #d4a373, #b8834a);
+    color: #1a1410;
+    border-radius: 50%;
+    width: 40px;
+    height: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 18px;
+}
+.hero-float-title {
+    font-size: 14px;
+    font-weight: 600;
+    color: #e8d5c0;
+}
+.hero-float-sub {
+    font-size: 12px;
+    color: #b5a598;
+}
+
+/* ===== ПРЕИМУЩЕСТВА ===== */
+.features-section {
+    background: #1a1410;
+    padding: 60px 0;
+    border-top: 1px solid rgba(255,255,255,0.04);
+    border-bottom: 1px solid rgba(255,255,255,0.04);
+}
+.feature-item {
+    padding: 24px;
+}
+.feature-icon {
+    width: 56px;
+    height: 56px;
+    background: rgba(255,255,255,0.04);
+    border-radius: 16px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0 auto 16px;
+    color: #d4a373;
+}
+.feature-title {
+    font-weight: 700;
+    color: #f5ede6;
+}
+.feature-desc {
+    font-size: 14px;
+    color: #b5a598;
+    margin: 0;
+}
+
+/* ===== АНКЕТЫ ===== */
+.profiles-section {
+    background: #120e0b;
+    padding: 60px 0;
+}
+.section-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 30px;
+}
+.section-title {
+    font-weight: 700;
+    color: #f5ede6;
+}
+.section-link {
+    color: #d4a373;
+    text-decoration: none;
+    font-weight: 500;
+}
+.section-link:hover {
+    color: #e8c9a0;
+}
+
+.profile-card {
+    background: #1a1410;
+    border-radius: 20px;
+    overflow: hidden;
+    border: 1px solid rgba(255,255,255,0.04);
+    transition: 0.3s;
+    cursor: pointer;
+}
+.profile-card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 12px 40px rgba(0,0,0,0.4);
+    border-color: rgba(212, 163, 115, 0.2);
+}
+.profile-image-wrapper {
+    position: relative;
+    height: 200px;
+    background: #2a1f18;
+    overflow: hidden;
+}
+.profile-image {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+.profile-image-placeholder {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 100%;
+    background: #2a1f18;
+    color: #8a7a6a;
+}
+.profile-views {
+    position: absolute;
+    bottom: 10px;
+    right: 10px;
+    background: rgba(0,0,0,0.6);
+    backdrop-filter: blur(4px);
+    color: #e8d5c0;
+    padding: 2px 12px;
+    border-radius: 30px;
+    font-size: 12px;
+}
+.profile-body {
+    padding: 16px;
+}
+.profile-info {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+.profile-name {
+    font-weight: 700;
+    color: #f5ede6;
+}
+.profile-meta {
+    font-size: 13px;
+    color: #8a7a6a;
+}
+.profile-actions {
+    display: flex;
+    gap: 6px;
+}
+.profile-like-btn {
+    background: rgba(255,255,255,0.04);
+    color: #d4a373;
+    border: none;
+    border-radius: 30px;
+    padding: 6px 14px;
+    font-size: 13px;
+    font-weight: 500;
+    transition: 0.3s;
+}
+.profile-like-btn:hover {
+    background: rgba(212, 163, 115, 0.15);
+}
+.profile-chat-btn {
+    background: #d4a373;
+    color: #1a1410;
+    border: none;
+    border-radius: 30px;
+    padding: 6px 14px;
+    font-size: 13px;
+    text-decoration: none;
+    transition: 0.3s;
+}
+.profile-chat-btn:hover {
+    background: #e8c9a0;
+    color: #1a1410;
+}
+
+/* ===== ПОСТЫ ===== */
+.posts-section {
+    background: #120e0b;
+    padding: 60px 0;
+}
+.post-card {
+    background: #1a1410;
+    border-radius: 20px;
+    overflow: hidden;
+    border: 1px solid rgba(255,255,255,0.04);
+    transition: 0.3s;
+}
+.post-card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 12px 40px rgba(0,0,0,0.4);
+}
+.post-image {
+    width: 100%;
+    height: 160px;
+    object-fit: cover;
+}
+.post-body {
+    padding: 16px;
+}
+.post-author {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 8px;
+}
+.post-avatar {
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    background: #2a1f18;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+    color: #8a7a6a;
+}
+.post-avatar-img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+.post-author-name {
+    font-weight: 600;
+    font-size: 14px;
+    color: #f5ede6;
+}
+.post-date {
+    font-size: 12px;
+    color: #8a7a6a;
+    margin-left: auto;
+}
+.post-content {
+    font-size: 14px;
+    color: #c4b5a5;
+    margin: 0;
+    line-height: 1.5;
+}
+.post-stats {
+    display: flex;
+    gap: 16px;
+    margin-top: 12px;
+    font-size: 13px;
+    color: #8a7a6a;
+}
+
+/* ===== CTA ===== */
+.cta-section {
+    background: linear-gradient(145deg, #1a1410, #2a1f18);
+    padding: 80px 0;
+    border-top: 1px solid rgba(255,255,255,0.04);
+}
+.cta-wrapper {
+    max-width: 600px;
+    margin: 0 auto;
+}
+.cta-title {
+    color: #f5ede6;
+    font-weight: 700;
+    font-size: 2rem;
+}
+.cta-desc {
+    color: #b5a598;
+    margin: 16px 0 24px;
+}
+.cta-btn {
+    background: linear-gradient(45deg, #d4a373, #b8834a);
+    border: none;
+    border-radius: 50px;
+    padding: 12px 40px;
+    font-weight: 600;
+    font-size: 18px;
+    color: #1a1410;
+    box-shadow: 0 10px 30px rgba(184, 131, 74, 0.3);
+}
+.cta-btn:hover {
+    background: linear-gradient(45deg, #c4956a, #a87545);
+    color: #1a1410;
+    transform: scale(1.02);
+}
+
+/* ===== ПУСТЫЕ СОСТОЯНИЯ ===== */
+.empty-state {
+    color: #8a7a6a;
+}
+.empty-state i {
+    color: #8a7a6a;
+}
+
+/* ===== АДАПТИВ ===== */
+@media (max-width: 768px) {
+    .hero-section {
+        padding: 40px 0;
+        min-height: auto;
+    }
+    .display-2 {
+        font-size: 2.4rem;
+    }
+    .hero-section::before,
+    .hero-section::after {
+        width: 200px;
+        height: 200px;
+    }
+    .hero-float-badge {
+        bottom: 5px;
+        right: 5px;
+        padding: 8px 12px;
+    }
+    .hero-float-icon {
+        width: 30px;
+        height: 30px;
+        font-size: 14px;
+    }
+    .hero-float-title {
+        font-size: 12px;
+    }
+    .hero-float-sub {
+        font-size: 10px;
+    }
+    .hero-image-img {
+        max-width: 100%;
+    }
+    .feature-item {
+        padding: 12px;
+    }
+    .profile-card {
+        max-width: 280px;
+        margin: 0 auto;
+    }
+}
+</style>
+
+{% endblock %}

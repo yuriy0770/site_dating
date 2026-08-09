@@ -1,0 +1,135 @@
+# ===== Python =====
+__pycache__/
+*.py[cod]
+*.pyo
+*.pyd
+.Python
+*.so
+*.egg
+*.egg-info/
+dist/
+build/
+eggs/
+parts/
+var/
+sdist/
+develop-eggs/
+.installed.cfg
+lib64/
+venv/
+env/
+ENV/
+.venv/
+pip-log.txt
+pip-delete-this-directory.txt
+.pytest_cache/
+.mypy_cache/
+.dmypy.json
+dmypy.json
+.coverage
+htmlcov/
+.tox/
+.mypy_cache/
+*.log
+
+# ===== Django =====
+*.sqlite3
+*.db
+db.sqlite3-journal
+/media/
+/staticfiles/
+/static/
+!static/CSS/
+!static/js/
+!static/images/
+
+# ===== IDE =====
+.idea/
+.vscode/
+*.swp
+*.swo
+*~
+.DS_Store
+.vscode/
+.idea/
+*.iml
+
+# ===== Environment =====
+.env
+.env.local
+.env.production
+.env.dev
+secrets.json
+config.json
+*.key
+*.pem
+
+# ===== Media =====
+/media/
+/uploads/
+/avatar/
+/cover/
+
+# ===== Database =====
+*.sqlite3
+*.db
+dump.rdb
+backups/
+pg_hba.conf
+postgresql.conf
+
+# ===== Docker =====
+.docker/
+docker-compose.override.yml
+*.tar.gz
+*.tar
+*.whl
+*.zip
+*.rar
+*.7z
+
+# ===== Git =====
+*.orig
+*.rej
+*.patch
+*.diff
+
+# ===== Logs =====
+*.log
+logs/
+*.log.*
+
+# ===== Testing =====
+.coverage
+.coverage.*
+coverage/
+coverage.xml
+htmlcov/
+.pytest_cache/
+.tox/
+
+# ===== Temporary =====
+temp/
+tmp/
+*.tmp
+*.temp
+*.bak
+*.swp
+
+# ===== OS =====
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# ===== Other =====
+*.zip
+*.tar
+*.tar.gz
+*.rar
+*.7z
+*.iso
+*.dmg
+*.exe
+*.msi
+*.deb
+*.rpm
