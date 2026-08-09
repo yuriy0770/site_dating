@@ -101,7 +101,10 @@
                     </li>
                     {% if user.is_authenticated %}
                     <li class="nav-item">
-                        <a class="nav-link" href="#">Анкеты</a>
+                        <a class="nav-link" href="{% url 'main:user_list' %}">Анкеты</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'main:profile_view' %}">Моя анкета</a>
                     </li>
                     <li class="nav-item">
                         <a class="nav-link" href="#">Лента</a>
@@ -113,16 +116,16 @@
                 </ul>
                 <div class="d-flex align-items-center gap-2">
                     {% if user.is_authenticated %}
-                        <span class="me-2 text-dark">{{ user.username }}</span>
-                        {% if user.avatar %}
-                            <img src="{{ user.avatar.url }}" class="avatar-sm" alt="avatar">
-                        {% else %}
-                            <i class="bi bi-person-circle fs-2 text-secondary"></i>
-                        {% endif %}
-                        <a href="{% url 'users:logout' %}" class="btn btn-outline-pink btn-sm">Выход</a>
+                    <span class="me-2 text-dark">{{ user.username }}</span>
+                    {% if user.avatar %}
+                    <img src="{{ user.avatar.url }}" class="avatar-sm" alt="avatar">
                     {% else %}
-                        <a href="{% url 'users:login' %}" class="btn btn-outline-pink">Вход</a>
-                        <a href="{% url 'users:register' %}" class="btn btn-pink">Регистрация</a>
+                    <i class="bi bi-person-circle fs-2 text-secondary"></i>
+                    {% endif %}
+                    <a href="{% url 'users:logout' %}" class="btn btn-outline-pink btn-sm">Выход</a>
+                    {% else %}
+                    <a href="{% url 'users:login' %}" class="btn btn-outline-pink">Вход</a>
+                    <a href="{% url 'users:register' %}" class="btn btn-pink">Регистрация</a>
                     {% endif %}
                 </div>
             </div>

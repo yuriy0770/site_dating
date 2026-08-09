@@ -1,0 +1,142 @@
+{% extends 'main/base.html' %}
+{% load static %}
+
+{% block title %}Редактирование анкеты — LoveConnect{% endblock %}
+
+{% block content %}
+
+<section class="py-5" style="background: #120e0b; min-height: 80vh;">
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-lg-8 col-md-10">
+                <div style="background: #1a1410; border-radius: 24px; border: 1px solid rgba(255,255,255,0.04); padding: 40px; box-shadow: 0 20px 60px rgba(0,0,0,0.4);">
+
+                    <!-- Заголовок -->
+                    <div class="d-flex justify-content-between align-items-center mb-4">
+                        <h3 style="color: #f5ede6; font-weight: 700;">✏️ Редактирование анкеты</h3>
+                        <a href="{% url 'main:profile_view' %}" class="btn" style="border: 1px solid rgba(255,255,255,0.1); color: #b5a598; border-radius: 30px; padding: 8px 24px;">
+                            <i class="bi bi-arrow-left"></i> Назад
+                        </a>
+                    </div>
+
+                    <!-- Форма -->
+                    <form method="post" enctype="multipart/form-data">
+                        {% csrf_token %}
+
+                        <div class="row g-4">
+                            <!-- Аватар -->
+                            <div class="col-md-4 text-center">
+                                {% if profile.user.avatar %}
+                                    <img src="{{ profile.user.avatar.url }}" id="avatarPreview" alt="Аватар" style="width: 150px; height: 150px; border-radius: 50%; object-fit: cover; border: 3px solid #d4a373; margin-bottom: 16px;">
+                                {% else %}
+                                    <img src="" id="avatarPreview" alt="Аватар" style="width: 150px; height: 150px; border-radius: 50%; object-fit: cover; border: 3px solid #d4a373; margin-bottom: 16px; display: none;">
+                                    <div id="avatarPlaceholder" style="width: 150px; height: 150px; border-radius: 50%; background: #2a1f18; display: flex; align-items: center; justify-content: center; margin: 0 auto 16px; border: 3px solid #d4a373;">
+                                        <i class="bi bi-person fs-1" style="color: #8a7a6a;"></i>
+                                    </div>
+                                {% endif %}
+
+                                <div style="text-align: center;">
+                                    <label for="avatarInput" style="cursor: pointer; color: #d4a373; font-size: 14px; border: 1px solid rgba(255,255,255,0.1); padding: 6px 20px; border-radius: 30px; display: inline-block;">
+                                        <i class="bi bi-camera"></i> Загрузить фото
+                                    </label>
+                                    <input type="file" name="avatar" id="avatarInput" accept="image/*" style="display: none;" onchange="previewAvatar(event)">
+                                </div>
+                            </div>
+
+                            <!-- Основные поля -->
+                            <div class="col-md-8">
+                                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 16px;">
+                                    <!-- Имя -->
+                                    <div style="grid-column: 1 / -1;">
+                                        <label style="color: #b5a598; font-size: 14px; display: block; margin-bottom: 4px;">Имя (никнейм) *</label>
+                                        <input type="text" name="username" value="{{ profile.user.username }}" class="form-control" style="background: #2a1f18; border: 1px solid rgba(255,255,255,0.06); color: #f5ede6; border-radius: 12px; padding: 12px 16px;">
+                                    </div>
+
+                                    <!-- Возраст -->
+                                    <div>
+                                        <label style="color: #b5a598; font-size: 14px; display: block; margin-bottom: 4px;">Возраст</label>
+                                        <input type="number" name="age" value="{{ profile.user.age }}" class="form-control" style="background: #2a1f18; border: 1px solid rgba(255,255,255,0.06); color: #f5ede6; border-radius: 12px; padding: 12px 16px;">
+                                    </div>
+
+                                    <!-- Город -->
+                                    <div>
+                                        <label style="color: #b5a598; font-size: 14px; display: block; margin-bottom: 4px;">Город</label>
+                                        <input type="text" name="city" value="{{ profile.user.city }}" class="form-control" style="background: #2a1f18; border: 1px solid rgba(255,255,255,0.06); color: #f5ede6; border-radius: 12px; padding: 12px 16px;">
+                                    </div>
+
+                                    <!-- Пол -->
+                                    <div>
+                                        <label style="color: #b5a598; font-size: 14px; display: block; margin-bottom: 4px;">Пол</label>
+                                        <select name="gender" class="form-control" style="background: #2a1f18; border: 1px solid rgba(255,255,255,0.06); color: #f5ede6; border-radius: 12px; padding: 12px 16px;">
+                                            <option value="M" {% if profile.gender == 'M' %}selected{% endif %}>Мужской</option>
+                                            <option value="F" {% if profile.gender == 'F' %}selected{% endif %}>Женский</option>
+                                        </select>
+                                    </div>
+
+                                    <!-- Ищет -->
+                                    <div>
+                                        <label style="color: #b5a598; font-size: 14px; display: block; margin-bottom: 4px;">Ищет</label>
+                                        <select name="looking_for" class="form-control" style="background: #2a1f18; border: 1px solid rgba(255,255,255,0.06); color: #f5ede6; border-radius: 12px; padding: 12px 16px;">
+                                            <option value="M" {% if profile.looking_for == 'M' %}selected{% endif %}>Мужчин</option>
+                                            <option value="F" {% if profile.looking_for == 'F' %}selected{% endif %}>Женщин</option>
+                                            <option value="A" {% if profile.looking_for == 'A' %}selected{% endif %}>Всех</option>
+                                        </select>
+                                    </div>
+
+                                    <!-- О себе -->
+                                    <div style="grid-column: 1 / -1;">
+                                        <label style="color: #b5a598; font-size: 14px; display: block; margin-bottom: 4px;">О себе</label>
+                                        <textarea name="bio" rows="3" class="form-control" style="background: #2a1f18; border: 1px solid rgba(255,255,255,0.06); color: #f5ede6; border-radius: 12px; padding: 12px 16px;">{{ profile.user.bio }}</textarea>
+                                    </div>
+
+                                    <!-- Интересы -->
+                                    <div style="grid-column: 1 / -1;">
+                                        <label style="color: #b5a598; font-size: 14px; display: block; margin-bottom: 4px;">Интересы</label>
+                                        <textarea name="interests" rows="2" class="form-control" style="background: #2a1f18; border: 1px solid rgba(255,255,255,0.06); color: #f5ede6; border-radius: 12px; padding: 12px 16px;">{{ profile.interests }}</textarea>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Кнопка сохранения -->
+                        <div class="mt-4 text-center">
+                            <button type="submit" class="btn" style="background: linear-gradient(45deg, #d4a373, #b8834a); color: #1a1410; border: none; border-radius: 30px; padding: 12px 48px; font-weight: 600; font-size: 16px;">
+                                <i class="bi bi-check-lg"></i> Сохранить изменения
+                            </button>
+                        </div>
+                    </form>
+
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<script>
+    function previewAvatar(event) {
+        const reader = new FileReader();
+        reader.onload = function() {
+            const preview = document.getElementById('avatarPreview');
+            const placeholder = document.getElementById('avatarPlaceholder');
+            preview.src = reader.result;
+            preview.style.display = 'block';
+            if (placeholder) placeholder.style.display = 'none';
+        }
+        reader.readAsDataURL(event.target.files[0]);
+    }
+</script>
+
+<style>
+    .form-control:focus {
+        background: #2a1f18;
+        border-color: #d4a373;
+        box-shadow: 0 0 0 3px rgba(212, 163, 115, 0.1);
+        color: #f5ede6;
+        outline: none;
+    }
+    .form-control::placeholder {
+        color: #6a5a4a;
+    }
+</style>
+
+{% endblock %}
