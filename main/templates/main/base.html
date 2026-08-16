@@ -117,11 +117,17 @@
                 <div class="d-flex align-items-center gap-2">
                     {% if user.is_authenticated %}
                     <span class="me-2 text-dark">{{ user.username }}</span>
+
                     {% if user.avatar %}
                     <img src="{{ user.avatar.url }}" class="avatar-sm" alt="avatar">
                     {% else %}
                     <i class="bi bi-person-circle fs-2 text-secondary"></i>
                     {% endif %}
+                    <a href="{% url 'main:profile_view' %}" class="btn btn-sm"
+                       style="border: 1px solid #e91e63; color: #e91e63; border-radius: 30px;">
+                        <i class="bi bi-person"></i>
+                    </a>
+
                     <a href="{% url 'users:logout' %}" class="btn btn-outline-pink btn-sm">Выход</a>
                     {% else %}
                     <a href="{% url 'users:login' %}" class="btn btn-outline-pink">Вход</a>

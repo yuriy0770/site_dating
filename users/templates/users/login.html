@@ -1,13 +1,101 @@
-{% extends 'main/index.html' %}
+{% extends 'main/base.html' %}
+{% load static %}
 
+{% block title %}Вход — LoveConnect{% endblock %}
 
 {% block content %}
 
-<form method="post">
-    {% csrf_token %}
-    {{ form.as_p }}
-    <button>Вход</button>
-    
-</form>
+<section class="py-5" style="background: #120e0b; min-height: 80vh; display: flex; align-items: center;">
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-lg-5 col-md-7">
+                <div style="background: #1a1410; border-radius: 24px; border: 1px solid rgba(255,255,255,0.04); padding: 40px; box-shadow: 0 20px 60px rgba(0,0,0,0.4);">
+
+                    <!-- Заголовок -->
+                    <div style="text-align: center; margin-bottom: 30px;">
+                        <h3 style="color: #f5ede6; font-weight: 700;">Добро пожаловать</h3>
+                        <p style="color: #b5a598; margin-top: 8px;">Войди, чтобы продолжить общение</p>
+                    </div>
+
+                    <!-- Форма -->
+                    <form method="post">
+                        {% csrf_token %}
+
+                        {% for field in form %}
+                        <div style="margin-bottom: 16px;">
+                            <label for="{{ field.id_for_label }}" style="color: #b5a598; font-size: 14px; display: block; margin-bottom: 4px;">
+                                {{ field.label }}
+                                {% if field.field.required %}<span style="color: #d4a373;">*</span>{% endif %}
+                            </label>
+                            {{ field }}
+                            {% if field.errors %}
+                                <div style="color: #e74c3c; font-size: 13px; margin-top: 4px;">
+                                    {% for error in field.errors %}
+                                        {{ error }}
+                                    {% endfor %}
+                                </div>
+                            {% endif %}
+                        </div>
+                        {% endfor %}
+
+                        <button type="submit" style="
+                            width: 100%;
+                            background: linear-gradient(45deg, #d4a373, #b8834a);
+                            color: #1a1410;
+                            border: none;
+                            border-radius: 30px;
+                            padding: 12px 0;
+                            font-weight: 600;
+                            font-size: 16px;
+                            cursor: pointer;
+                            transition: 0.3s;
+                            margin-top: 8px;
+                        " onmouseover="this.style.transform='scale(1.02)'" onmouseout="this.style.transform='scale(1)'">
+                            <i class="bi bi-box-arrow-in-right"></i> Войти
+                        </button>
+                    </form>
+
+                    <!-- Ссылка на регистрацию -->
+                    <div style="text-align: center; margin-top: 20px; color: #b5a598;">
+                        Нет аккаунта?
+                        <a href="{% url 'users:register' %}" style="color: #d4a373; text-decoration: none; font-weight: 600;">Зарегистрироваться</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<style>
+    /* Стилизация полей формы */
+    form input, form select {
+        width: 100%;
+        background: #2a1f18;
+        border: 1px solid rgba(255,255,255,0.06);
+        color: #f5ede6;
+        border-radius: 12px;
+        padding: 12px 16px;
+        transition: 0.3s;
+        font-size: 14px;
+        box-sizing: border-box;
+    }
+    form input:focus, form select:focus {
+        border-color: #d4a373;
+        box-shadow: 0 0 0 3px rgba(212, 163, 115, 0.1);
+        outline: none;
+        background: #2a1f18;
+        color: #f5ede6;
+    }
+    form input::placeholder {
+        color: #6a5a4a;
+    }
+    .errorlist {
+        list-style: none;
+        padding: 0;
+        margin: 4px 0 0 0;
+        color: #e74c3c;
+        font-size: 13px;
+    }
+</style>
 
 {% endblock %}
