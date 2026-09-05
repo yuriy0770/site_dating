@@ -2,7 +2,21 @@ from django.contrib import admin
 from django.contrib.auth.admin import UserAdmin
 from .models import Profile, Post, Comment, Like
 from users.models import CustomUser
+from .models import ChatRoom, Message
 
+@admin.register(ChatRoom)
+class ChatRoomAdmin(admin.ModelAdmin):
+    list_display = ('id', 'created_at', 'is_active')
+    filter_horizontal = ('participants',)
+
+
+@admin.register(Message)
+class MessageAdmin(admin.ModelAdmin):
+    list_display = ('room', 'author', 'content_preview', 'created_at', 'is_read')
+    list_filter = ('is_read', 'created_at')
+
+    def content_preview(self, obj):
+        return obj.content[:50]
 
 @admin.register(CustomUser)
 class CustomUserAdmin(UserAdmin):

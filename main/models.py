@@ -3,6 +3,8 @@ from django.contrib.auth import get_user_model
 from django.utils.text import slugify
 from django.utils import timezone
 
+from users.models import CustomUser
+
 User = get_user_model()
 
 
@@ -89,3 +91,31 @@ class Like(models.Model):
         if self.post:
             return f"{self.user} лайкнул пост {self.post.id}"
         return f"{self.user} лайкнул анкету {self.profile.user.username}"
+
+class ChatRoom(models.Model):
+    """Комната чата между двумя пользователями"""
+    participants = models.ManyToManyField(CustomUser, related_name='chat_rooms', verbose_name='Участники')
+    created_at = models.DateTimeField(auto_now_add=True, verbose_name='Создан')
+    is_active = models.BooleanField(default=True, verbose_name='Активен')
+
+    def __str__(self):
+        return f"Чат {self.id}"
+
+    class Meta:
+        verbose_name = 'Чат'
+        verbose_name_plural = 'Чаты'
+
+
+class Message(models.Model):
+    """Сообщение в чате"""
+    room = models.ForeignKey(ChatRoom, on_delete=models.CASCADE, related_name='messages', verbose_name='Комната')
+    author = models.ForeignKey(CustomUser, on_delete=models.CASCADE, related_name='messages', verbose_name='Автор')
+    content = models.TextField(max_length=2000, verbose_name='Текст')
+    created_at = models.DateTimeField(auto_now_add=True, verbose_name='Создан')
+    is_read = models.BooleanField(default=False, verbose_name='Прочитано')
+
+    class Meta:
+        ordering = ['created_at']
+
+    def __str__(self):
+        return f"{self.author.username}: {self.content[:30]}"

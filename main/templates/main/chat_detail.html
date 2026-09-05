@@ -1,0 +1,63 @@
+{% extends 'main/base.html' %}
+{% load static %}
+
+{% block title %}Чат — LoveConnect{% endblock %}
+
+{% block content %}
+
+<section class="py-5" style="background: #120e0b; min-height: 80vh;">
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-lg-8">
+                <div style="background: #1a1410; border-radius: 24px; border: 1px solid rgba(255,255,255,0.04); padding: 30px; box-shadow: 0 20px 60px rgba(0,0,0,0.4);">
+
+                    <!-- Заголовок -->
+                    <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 20px;">
+                        <h4 style="color: #f5ede6; font-weight: 700;">
+                            <i class="bi bi-chat-dots"></i>
+                            {{ other_user.username }}
+                        </h4>
+                        <a href="{% url 'main:chat_list' %}" style="color: #b5a598; text-decoration: none;">
+                            <i class="bi bi-arrow-left"></i> Назад
+                        </a>
+                    </div>
+
+                    <!-- Сообщения -->
+                    <div style="background: #0f0b08; border-radius: 16px; padding: 20px; max-height: 400px; overflow-y: auto; margin-bottom: 16px;">
+                        {% if messages %}
+                            {% for msg in messages %}
+                                <div style="display: flex; justify-content: {% if msg.author == user %}flex-end{% else %}flex-start{% endif %}; margin-bottom: 12px;">
+                                    <div style="background: {% if msg.author == user %}#d4a373{% else %}#2a1f18{% endif %}; color: {% if msg.author == user %}#1a1410{% else %}#f5ede6{% endif %}; border-radius: 16px; padding: 10px 16px; max-width: 70%; word-wrap: break-word;">
+                                        <div>{{ msg.content }}</div>
+                                        <div style="font-size: 10px; color: {% if msg.author == user %}#6a5a4a{% else %}#8a7a6a{% endif %}; text-align: right; margin-top: 4px;">
+                                            {{ msg.created_at|time:"H:i" }}
+                                        </div>
+                                    </div>
+                                </div>
+                            {% endfor %}
+                        {% else %}
+                            <div style="text-align: center; color: #8a7a6a; padding: 30px 0;">
+                                <i class="bi bi-chat" style="font-size: 36px; display: block; margin-bottom: 12px;"></i>
+                                <p>Напишите первое сообщение!</p>
+                            </div>
+                        {% endif %}
+                    </div>
+
+                    <!-- Форма отправки сообщения -->
+                    <form method="post">
+                        {% csrf_token %}
+                        <div style="display: flex; gap: 10px;">
+                            <input type="text" name="content" placeholder="Введите сообщение..."
+                                   style="flex: 1; background: #2a1f18; border: 1px solid rgba(255,255,255,0.06); color: #f5ede6; border-radius: 30px; padding: 12px 20px; outline: none;">
+                            <button type="submit" style="background: linear-gradient(45deg, #d4a373, #b8834a); color: #1a1410; border: none; border-radius: 30px; padding: 12px 24px; font-weight: 600; cursor: pointer;">
+                                <i class="bi bi-send"></i>
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+{% endblock %}

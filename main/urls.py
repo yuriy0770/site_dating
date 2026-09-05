@@ -11,4 +11,8 @@ urlpatterns = [
     path('user/<slug:slug>/', views.user_detail, name='user_detail'),
     path('profile/', views.profile_view, name='profile_view'),
     path('profile/edit/', views.profile_edit, name='profile_edit'),
+    path('like/<int:user_id>/', views.like_user, name='like_user'),
+    path('user/id/<int:user_id>/', views.user_detail_by_id, name='user_detail_by_id'),
+    path('chats/', views.chat_list, name='chat_list'),
+    path('chat/<int:room_id>/', views.chat_detail, name='chat_detail'),
 ]

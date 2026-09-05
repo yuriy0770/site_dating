@@ -14,20 +14,48 @@
                     <!-- Заголовок -->
                     <div class="d-flex justify-content-between align-items-center mb-4">
                         <h3 style="color: #f5ede6; font-weight: 700;">👤 Моя анкета</h3>
-                        <a href="{% url 'main:profile_edit' %}" class="btn" style="background: linear-gradient(45deg, #d4a373, #b8834a); color: #1a1410; border: none; border-radius: 30px; padding: 8px 24px; font-weight: 600;">
+                        <a href="{% url 'main:profile_edit' %}" class="btn"
+                           style="background: linear-gradient(45deg, #d4a373, #b8834a); color: #1a1410; border: none; border-radius: 30px; padding: 8px 24px; font-weight: 600; text-decoration: none;">
                             <i class="bi bi-pencil"></i> Редактировать
                         </a>
                     </div>
 
-                    <!-- Информация -->
+                    <!-- ===== УВЕДОМЛЕНИЯ О ЛАЙКАХ ===== -->
+                    {% if user.profile.likes.all %}
+                    <div style="background: #2a1f18; border-radius: 12px; padding: 16px; margin-bottom: 24px; border: 1px solid rgba(212, 163, 115, 0.2);">
+                        <div style="color: #b5a598; font-size: 14px; margin-bottom: 8px;">
+                            <i class="bi bi-heart-fill" style="color: #e74c3c;"></i>
+                            <strong style="color: #f5ede6;">Тебя лайкнули:</strong>
+                        </div>
+                        <div style="display: flex; flex-wrap: wrap; gap: 8px;">
+                            {% for like in user.profile.likes.all %}
+                            <a href="{% url 'main:user_detail' like.user.profile.slug %}"
+                               style="background: #1a1410; border: 1px solid rgba(255,255,255,0.06); border-radius: 20px; padding: 4px 14px; color: #d4a373; text-decoration: none; font-size: 14px; display: inline-flex; align-items: center; gap: 4px;">
+                                {% if like.user.avatar %}
+                                <img src="{{ like.user.avatar.url }}"
+                                     style="width: 20px; height: 20px; border-radius: 50%; object-fit: cover;">
+                                {% else %}
+                                <i class="bi bi-person-circle" style="font-size: 16px;"></i>
+                                {% endif %}
+                                {{ like.user.username }}
+                            </a>
+                            {% endfor %}
+                        </div>
+                        <div style="color: #8a7a6a; font-size: 12px; margin-top: 8px;">
+                            Всего: {{ user.profile.likes.count }} лайков
+                        </div>
+                    </div>
+                    {% endif %}
+                    <!-- Информация о пользователе -->
                     <div class="row g-4">
                         <div class="col-md-4 text-center">
                             {% if profile.user.avatar %}
-                                <img src="{{ profile.user.avatar.url }}" alt="Аватар" style="width: 200px; height: 200px; border-radius: 50%; object-fit: cover; border: 4px solid #d4a373;">
+                            <img src="{{ profile.user.avatar.url }}" alt="Аватар"
+                                 style="width: 200px; height: 200px; border-radius: 50%; object-fit: cover; border: 4px solid #d4a373;">
                             {% else %}
-                                <div style="width: 200px; height: 200px; border-radius: 50%; background: #2a1f18; display: flex; align-items: center; justify-content: center; margin: 0 auto; border: 4px solid #d4a373;">
-                                    <i class="bi bi-person fs-1" style="color: #8a7a6a;"></i>
-                                </div>
+                            <div style="width: 200px; height: 200px; border-radius: 50%; background: #2a1f18; display: flex; align-items: center; justify-content: center; margin: 0 auto; border: 4px solid #d4a373;">
+                                <i class="bi bi-person fs-1" style="color: #8a7a6a;"></i>
+                            </div>
                             {% endif %}
                             <h4 style="color: #f5ede6; margin-top: 16px;">{{ profile.user.username }}</h4>
                             <p style="color: #8a7a6a;">
@@ -41,18 +69,22 @@
                                 <div style="background: #2a1f18; border-radius: 12px; padding: 16px;">
                                     <div style="color: #8a7a6a; font-size: 13px;">Пол</div>
                                     <div style="color: #f5ede6; font-weight: 600;">
-                                        {% if profile.gender == 'M' %}Мужской{% elif profile.gender == 'F' %}Женский{% else %}Не указан{% endif %}
+                                        {% if profile.gender == 'M' %}Мужской{% elif profile.gender == 'F' %}Женский{%
+                                        else %}Не указан{% endif %}
                                     </div>
                                 </div>
                                 <div style="background: #2a1f18; border-radius: 12px; padding: 16px;">
                                     <div style="color: #8a7a6a; font-size: 13px;">Ищет</div>
                                     <div style="color: #f5ede6; font-weight: 600;">
-                                        {% if profile.looking_for == 'M' %}Мужчин{% elif profile.looking_for == 'F' %}Женщин{% elif profile.looking_for == 'A' %}Всех{% else %}Не указано{% endif %}
+                                        {% if profile.looking_for == 'M' %}Мужчин{% elif profile.looking_for == 'F'
+                                        %}Женщин{% elif profile.looking_for == 'A' %}Всех{% else %}Не указано{% endif %}
                                     </div>
                                 </div>
                                 <div style="background: #2a1f18; border-radius: 12px; padding: 16px; grid-column: 1 / -1;">
                                     <div style="color: #8a7a6a; font-size: 13px;">О себе</div>
-                                    <div style="color: #c4b5a5;">{{ profile.user.bio|default:"Пока ничего не рассказал о себе." }}</div>
+                                    <div style="color: #c4b5a5;">{{ profile.user.bio|default:"Пока ничего не рассказал о
+                                        себе." }}
+                                    </div>
                                 </div>
                                 <div style="background: #2a1f18; border-radius: 12px; padding: 16px; grid-column: 1 / -1;">
                                     <div style="color: #8a7a6a; font-size: 13px;">Интересы</div>
@@ -70,9 +102,9 @@
                         </div>
                     </div>
 
-                    <!-- Кнопка назад -->
                     <div class="mt-4 text-center">
-                        <a href="{% url 'main:index' %}" class="btn" style="border: 1px solid rgba(255,255,255,0.1); color: #b5a598; border-radius: 30px; padding: 8px 32px;">
+                        <a href="{% url 'main:index' %}" class="btn"
+                           style="border: 1px solid rgba(255,255,255,0.1); color: #b5a598; border-radius: 30px; padding: 8px 32px; text-decoration: none;">
                             <i class="bi bi-arrow-left"></i> На главную
                         </a>
                     </div>
